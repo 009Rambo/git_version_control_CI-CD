@@ -1,26 +1,31 @@
 stages:
+  - test
   - build
   - deploy
-
+ 
 variables:
-  DOCKER_DRIVER: overlay2
-
-before_script:
-  - export CI_PROJECT_DIR=$(pwd)
-
-build:
+  REACT_APP_API_URL: "https://23fullstack05.course.tamk.cloud"
+ 
+test_job:
+  stage: test
+  script:
+    - npm install
+    - npm test
+ 
+build_job:
   stage: build
   script:
-    - cd $CI_PROJECT_DIR
     - npm install
     - npm run build
-
-deploy:
+  artifacts:
+    paths:
+      - build/
+ 
+deploy_job:
   stage: deploy
-  only:
-    - master
   script:
     - apt-get update -qy
     - apt-get install -y sshpass
-    - sshpass -p "$SSH_PASSWORD" scp -r $CI_PROJECT_DIR/build/* user@23fullstack05.course.tamk.cloud:/home/user/app
-
+    - sshpass -p $SSH_PASSWORD scp -o StrictHostKeyChecking=no -r build/* $SSH_USER@$SSH_HOST:/path/to/your/deployment/directory
+  only:
+    - main
