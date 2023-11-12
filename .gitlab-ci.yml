@@ -1,0 +1,18 @@
+stages:
+  - build
+  - deploy
+
+build:
+  stage: build
+  script:
+    - npm install
+    - npm run build
+
+deploy:
+  stage: deploy
+  only:
+    - master  # Deploy only when changes are pushed to the master branch
+  script:
+    - apt-get update -qy
+    - apt-get install -y sshpass
+    - sshpass -p "$SSH_PASSWORD" scp -r build/* user@23fullstack05.course.tamk.cloud:/home/user/app
