@@ -1,10 +1,8 @@
-const express = require('express');
+// Simple Greeting Script in Node.js
+
 const readline = require('readline');
 
-const app = express();
-const port = 3000;
-
-app.get('/', (req, res) => {
+function greetUser() {
     const rl = readline.createInterface({
         input: process.stdin,
         output: process.stdout
@@ -14,23 +12,18 @@ app.get('/', (req, res) => {
         rl.question('Enter your age: ', (userAge) => {
             userAge = parseInt(userAge);
             if (!isNaN(userAge)) {
-                
-                // Generate a personalized greeting message based on age
-                const greetingMessage = (userAge < 18)
-                    ? Hello, ${userName}! You're young!
-                    : Hello, ${userName}! Welcome to the script.;
-
-                // Send the greeting as the HTTP response
-                res.send(greetingMessage);
+                // Print a personalized greeting message based on age
+                if (userAge < 18) {
+                    console.log(`Hello, ${userName}! You're young!`);
+                } else {
+                    console.log(`Hello, ${userName}! Welcome to the script.`);
+                }
             } else {
-                res.send('Invalid age. Please enter a valid number.');
+                console.log('Invalid age. Please enter a valid number.');
             }
-
-            rl.close();
-        });
+        rl.close();
     });
 });
+}
 
-app.listen(port, () => {
-    console.log(Server is running at http://localhost:${port});
-});
+greetUser();
