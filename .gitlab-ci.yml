@@ -2,17 +2,25 @@ stages:
   - build
   - deploy
 
+variables:
+  DOCKER_DRIVER: overlay2
+
+before_script:
+  - export CI_PROJECT_DIR=$(pwd)
+
 build:
   stage: build
   script:
+    - cd $CI_PROJECT_DIR
     - npm install
     - npm run build
 
 deploy:
   stage: deploy
   only:
-    - master  # Deploy only when changes are pushed to the master branch
+    - master
   script:
     - apt-get update -qy
     - apt-get install -y sshpass
-    - sshpass -p "$SSH_PASSWORD" scp -r build/* user@23fullstack05.course.tamk.cloud:/home/user/app
+    - sshpass -p "$SSH_PASSWORD" scp -r $CI_PROJECT_DIR/build/* user@23fullstack05.course.tamk.cloud:/home/user/app
+
