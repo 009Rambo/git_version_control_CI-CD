@@ -1,22 +1,22 @@
-stages:
+ stages:
   - test
   - build
   - deploy
  
 variables:
-  REACT_APP_API_URL: "https://23fullstack05.course.tamk.cloud"
+  REACT_APP_API_URL: "https://23fullstack05.course.tamk.cloud"  # Replace with your API server URL
  
 test_job:
   stage: test
   script:
-    - npm install
-    - npm test
+    - docker run -v $(pwd):/app -w /app node:14 npm install
+    - docker run -v $(pwd):/app -w /app node:14 npm test
  
 build_job:
   stage: build
   script:
-    - npm install
-    - npm run build
+    - docker run -v $(pwd):/app -w /app node:14 npm install
+    - docker run -v $(pwd):/app -w /app node:14 npm run build
   artifacts:
     paths:
       - build/
