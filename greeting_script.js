@@ -9,17 +9,21 @@ function greetUser() {
     });
 
     rl.question('Enter your name: ', (userName) => {
-        console.log(`Hello, ${userName}! Welcome to the simple greeting script.`);
+        rl.question('Enter your age: ', (userAge) => {
+            userAge = parseInt(userAge);
+            if (!isNaN(userAge)) {
+                // Print a personalized greeting message based on age
+                if (userAge < 18) {
+                    console.log(`Hello, ${userName}! You're young!`);
+                } else {
+                    console.log(`Hello, ${userName}! Welcome to the script.`);
+                }
+            } else {
+                console.log('Invalid age. Please enter a valid number.');
+            }
         rl.close();
     });
+});
 }
 
-function main() {
-    // Call the greetUser function
-    greetUser();
-}
-
-// Run the main function if the script is executed
-if (require.main === module) {
-    main();
-}
+greetUser();

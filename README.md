@@ -1,19 +1,16 @@
-# Simple Greeting Script
+# Git_version_control_week45
 
-This is a simple greeting script written in JavaScript. It prompts the user for their name and then prints a personalized greeting message.
+This project demonstrates feature development and release management using Git.
 
-## How to Use
+## Feature Development
 
-1. Open the script in a text editor of your choice.
-2. Run the script using a JavaScript runtime environment like a web browser's developer console or Node.js.
+1. Created a new feature branch (`feature`) from the develop branch.
+2. Simulated feature development by adding a new file (`greeting_script.js`) with greeting some code.
+3. Merged the feature branch back into the develop branch.
 
+## Release Management
 
-## Instructions for Node.js
+1. Created a release branch (`release`) from the main branch.
+2. Simulated last-minute age named features to the script.
+3. Merged the release branch back into the main branch.
 
-1. Ensure you have Node.js installed on your machine.
-2. Save the script to a file, e.g., `greeting_script.js`.
-3. Open a terminal and navigate to the directory containing the script.
-4. Run the script using the following command:
-
-   ```bash
-   node greeting_script.js
