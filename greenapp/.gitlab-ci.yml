@@ -1,31 +1,71 @@
-stages:
+
+stages:          # List of stages for jobs, and their order of execution
   - test
   - build
   - deploy
 
-variables:
-  REACT_APP_API_URL: "https://23fullstack05.course.tamk.cloud"  # Replace with your API server URL
+cache:
+  key: npm
+  policy: pull-push
+  paths:
+    - .npm/
+    - build/
 
-test_job:
+##
+#frontend
+##
+
+test_frontend:
+  stage: test
+  image: node:slim
+  script:
+    - echo "Test frontend"
+    - npm ci --cache .npm --prefer-offline
+    - CI=true npm test
+
+build_frontend:
+  stage: build
+  image: node:slim
+  script:
+    - echo "Build frontend"
+    - npm ci --cache .npm --prefer-offline
+    - npm run build
+    - ls build
+
+deploy_frontend:
+   stage: deploy
+   script:
+#     - echo "Deploy"
+    - apk update && apk add rsync openssh curl
+    # Prepare SSH settings
+    - mkdir -p ~/.ssh && (umask  077 ; echo "${DEPLOY_KEY_PRIVATE}" | base64 -d > ~/.ssh/id_rsa)
+    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+    # Transfer to server
+    - rsync -r . "deploy@172.16.6.213:/home/deploy/app"
+    # Run commands on the server
+    - ssh deploy@172.16.6.213 /bin/bash
+            "
+            echo 'Starting..';
+            cd ~/app;
+            docker build -t greenapp .;
+            docker run -d --name greenapp_container -p 3000:3000 greenapp;
+            "
+
+##
+#backend
+##
+
+test_backend:
   stage: test
   script:
-    - npm install
-    - npm test
+    - echo "Test"
 
-build_job:
+build_backend:
   stage: build
   script:
-    - npm install
-    - npm run build
-  artifacts:
-    paths:
-      - build/
+    - echo "Build"
 
-deploy_job:
+deploy_backend:
   stage: deploy
   script:
-    - apt-get update -qy
-    - apt-get install -y sshpass
-    - sshpass -p $SSH_PASSWORD scp -o StrictHostKeyChecking=no -r build/* $SSH_USER@$SSH_HOST:/path/to/your/deployment/directory
-  only:
-    - main
+    - echo "Deploy"
