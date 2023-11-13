@@ -1,5 +1,5 @@
 // jest.config.js
 module.exports = {
-    roots: ["<rootDir>/src"],
+    roots: ["<rootDir>greenapp/src"],
     // other Jest configurations...
   };
